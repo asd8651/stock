@@ -6,10 +6,10 @@
 -   [本國上櫃證券國際證券辨識號碼一覽表](http://isin.twse.com.tw/isin/C_public.jsp?strMode=4)
 #### Import
 ```
--   requests
--   json
--   pymysql
--   datetime
+- requests
+- json
+- pymysql
+- datetime
 ```
 ##### Get昨天日期
 ```
