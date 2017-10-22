@@ -2,6 +2,8 @@
 ### 金融系統開發
 #### 資料來源
 -   [TWSE臺灣證券交易所](http://www.twse.com.tw/zh/)
+-   [本國上市證券國際證券辨識號碼一覽表](http://isin.twse.com.tw/isin/C_public.jsp?strMode=2)
+-   [本國上櫃證券國際證券辨識號碼一覽表](http://isin.twse.com.tw/isin/C_public.jsp?strMode=4)
 #### Import
 ```
 -   requests
