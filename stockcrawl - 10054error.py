@@ -50,7 +50,6 @@ otcsid = otcdf[u'股票代號'].loc[0]
 
 
 yesterday = datetime.datetime.now().strftime("%Y%m%d")
-print yesterday
 #print type(data)編碼類型
 db =pymysql.connect(host='0.tcp.ngrok.io', port=12714, user='root', passwd='ncutim', db='onmarket' , charset='utf8')
 cursor = db.cursor()
@@ -63,6 +62,7 @@ for l in range(len(newsid)):
     res = requests.get('http://www.twse.com.tw/exchangeReport/STOCK_DAY',
                        params=params)
     allData = json.loads(res.text)
+    time.sleep(1)
     # fields = json.dumps(fie, encoding="UTF-8", ensure_ascii=False) 轉換為str
     day = allData['data']
     #search = "select * from`" + sid + "` WHERE ID = 1;"
@@ -84,7 +84,7 @@ for l in range(len(newsid)):
     cursor.execute(sql)
     for i in range(len(day)):
         name = newname[l]
-        insert = ("""INSERT  INTO `""" + sid + """` (`Date`, `sid`, `name`, `shareTrades`, `turnover`, `open`, `high`, `low`, `closing`) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s) ON DUPLICATE KEY UPDATE Date = %s,sid = %s,name = %s,shareTrades = %s,turnover=%s,open = %s,high = %s,low = %s,closing = %s""")
+        insert = ("""INSERT  INTO `""" + sid + """` (`Date`, `sid`, `name`, `shareTrades`, `turnover`, `open`, `high`, `low`, `closing`) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s) ON DUPLICATE KEY UPDATE (`Date`, `sid`, `name`, `shareTrades`, `turnover`, `open`, `high`, `low`, `closing`) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)""")
         # ON DUPLICATE KEY UPDATE (`Date`,`sid`,`name`,`shareTrades`,`turnover`,`over`,`high`,`low`,`closing`)VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)有更新，無新增
         da = (day[i][0], sid, name, day[i][1], day[i][2], day[i][3], day[i][4], day[i][5], day[i][6] , day[i][0], sid, name, day[i][1], day[i][2], day[i][3], day[i][4], day[i][5], day[i][6])
         cursor.execute(insert,da)
