@@ -12,7 +12,7 @@ import time
 
 
 #抓取上市櫃股票代碼名稱－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－
-
+'''
 df=pd.read_html('http://isin.twse.com.tw/isin/C_public.jsp?strMode=2',encoding='big5hkscs',header=0)
 newdf=df[0][df[0][u'產業別'] > '0']
 del newdf[u'國際證券辨識號碼(ISIN Code)'],newdf[u'CFICode'],newdf[u'備註']
@@ -28,7 +28,7 @@ newdf=newdf.rename(columns = {0:u'股票代號',1:u'股票名稱'})
 del newdf[u'有價證券代號及名稱'],newdf[u'上市日']
 newsid = newdf[u'股票代號']
 newname = newdf[u'股票名稱']
-
+'''
 odf=pd.read_html('http://isin.twse.com.tw/isin/C_public.jsp?strMode=4',encoding='big5hkscs',header=0)
 otcdf=odf[0][odf[0][u'產業別'] > '0']
 del otcdf[u'國際證券辨識號碼(ISIN Code)'],otcdf[u'CFICode'],otcdf[u'備註']
@@ -56,7 +56,7 @@ for o in range(len(otcsid)):
     osid = otcsid[o]
     oname = otcname[o]
     params = {"date": yesterday,
-              "stockNo": sid}
+              "stockNo": osid}
     headers = {'user-agent': 'my-app/0.0.1'}
     res = requests.get('http://www.twse.com.tw/exchangeReport/STOCK_DAY',
                        params=params)
@@ -85,7 +85,7 @@ for o in range(len(otcsid)):
             cursor.execute(insert,oda)
             db.commit()
     time.sleep(1)
-
+'''
 for l in range(len(newsid)):
     sid = newsid[l]
     name = newname[l]
@@ -119,6 +119,7 @@ for l in range(len(newsid)):
             cursor.execute(insert,da)
             db.commit()
     time.sleep(1)
+'''
 db.close()
 
 #引入thread 同時上傳上市上貴資料
