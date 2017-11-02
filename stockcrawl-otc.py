@@ -11,6 +11,7 @@ from pandas import Series, DataFrame
 import time
 
 yesterday = datetime.datetime.now().strftime("%Y%m%d")
+'''
 #抓取上市櫃股票代碼名稱－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－
 df=pd.read_html('http://isin.twse.com.tw/isin/C_public.jsp?strMode=2',encoding='big5hkscs',header=0)
 newdf=df[0][df[0][u'產業別'] > '0']
@@ -27,7 +28,6 @@ newdf=newdf.rename(columns = {0:u'股票代號',1:u'股票名稱'})
 del newdf[u'有價證券代號及名稱'],newdf[u'上市日']
 newsid = newdf[u'股票代號']
 newname = newdf[u'股票名稱']
-print newname[1]
 '''
 odf=pd.read_html('http://isin.twse.com.tw/isin/C_public.jsp?strMode=4',encoding='big5hkscs',header=0)
 otcdf=odf[0][odf[0][u'產業別'] > '0']
@@ -47,10 +47,11 @@ otcname = otcdf[u'股票名稱']
 print otcsid
 print otcname
 #－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－
+db =pymysql.connect(host='60.249.6.104', port=33060, user='root', passwd='ncutim', db='otc' , charset='utf8')
+if (db):
+    print 'good';
 
-
-
-
+cursor = db.cursor()
 o = 0
 for o in range(len(otcsid)):
     osid = otcsid[o]
@@ -61,6 +62,8 @@ for o in range(len(otcsid)):
     res = requests.get('http://www.twse.com.tw/exchangeReport/STOCK_DAY',
                        params=params).decode("utf-8")
     allData = json.loads(res.text)
+    if (allData):
+        print sid+'inserted';
     if ('data' in allData.keys()):
         oday = allData['data']
         osql = """CREATE TABLE IF NOT EXISTS `""" + osid + """`(
@@ -86,10 +89,6 @@ for o in range(len(otcsid)):
             db.commit()
     time.sleep(1)
 '''
-db =pymysql.connect(host='60.249.6.104', port=33060, user='root', passwd='ncutim', db='onmarket' , charset='utf8')
-cursor = db.cursor()
-if (db):
-    print 'good';
 
 l = 0
 for l in range(len(newsid)):
@@ -101,8 +100,6 @@ for l in range(len(newsid)):
     res = requests.get('http://www.twse.com.tw/exchangeReport/STOCK_DAY',
                        params=params)
     allData = json.loads(res.text)
-    if(allData):
-        print sid+u'有資料喔';
     if ('data' in allData.keys()):
         day = allData['data']
         sql = """CREATE TABLE IF NOT EXISTS `""" + sid + """`(
@@ -127,7 +124,7 @@ for l in range(len(newsid)):
             cursor.execute(insert,da)
             db.commit()
     time.sleep(1)
-
+'''
 db.close()
 
 #引入thread 同時上傳上市上貴資料
