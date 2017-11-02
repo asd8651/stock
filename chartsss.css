@@ -1,0 +1,42 @@
+#Header{
+    width:360px;
+    height:80px;
+    text-align:center;
+    line-height:80px;
+    font-size:15px;
+    color:#fffaf3;
+    font-weight:bold;
+    background-color:#f9c81e;
+}
+#Sidebar{
+    width:20%;
+    float:left;
+    height:280px;
+    text-align:center;
+    line-height:280px;
+    font-size:15px;
+    color:#ffffff;
+    font-weight:bold;
+    background-color:#cecece;
+}
+#container{
+    width:80%;
+    height:50%;
+    text-align:center;
+    line-height:280px;
+    font-size:15px;
+    color:#f9c81e;
+    font-weight:bold;
+    float:left;
+    margin:auto;
+}
+#Footer{
+    width:360px;
+    height:80px;
+    text-align:center;
+    line-height:80px;
+    font-size:15px;
+    color:#fffaf3;
+    font-weight:bold;
+    background-color:#f9c81e;
+}
