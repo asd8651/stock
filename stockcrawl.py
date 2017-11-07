@@ -104,6 +104,7 @@ for l in range(len(newsid)):
     if(allData):
         print sid+u'有資料喔';
     if ('data' in allData.keys()):
+        print 'data exists';
         day = allData['data']
         sql = """CREATE TABLE IF NOT EXISTS `""" + sid + """`(
                         ID INT AUTO_INCREMENT PRIMARY KEY,
@@ -119,13 +120,20 @@ for l in range(len(newsid)):
                         ENGINE = InnoDB,
                         CHARSET=utf8,
                         COLLATE utf8_unicode_ci;"""
-        cursor.execute(sql)
+        st = """select count(*) from `"""+sid+"""`"""
+        searchTable = cursor.execute(st)
+        if (searchTable):
+            print u'資料表已存在';
+        else:
+            cursor.execute(sql);
         for i in range(len(day)):
             insert = ("""INSERT  INTO `""" + sid + """` (`Date`, `sid`, `name`, `shareTrades`, `turnover`, `open`, `high`, `low`, `closing`) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)""")
             # ON DUPLICATE KEY UPDATE (`Date`,`sid`,`name`,`shareTrades`,`turnover`,`over`,`high`,`low`,`closing`)VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)有更新，無新增
             da = (day[i][0], sid, name, day[i][1], day[i][2], day[i][3], day[i][4], day[i][5], day[i][6])
             cursor.execute(insert,da)
             db.commit()
+            if(insert):
+                print 'inserted';
     time.sleep(1)
 
 db.close()
