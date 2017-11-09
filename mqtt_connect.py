@@ -1,15 +1,34 @@
 import paho.mqtt.client as mqtt
+import time
+def on_connect(mqttc, obj, flags, rc):
+    print("rc: " + str(rc))
 
-def on_connect(client, userdata, flags, rc):
-    print("Connected with result code "+str(rc))
-    client.subscribe("PV 702")
+def on_message(mqttc, obj, msg):
+    print(msg.topic + " " + str(msg.qos) + " " + str(msg.payload))
 
-def on_message(client, userdata, msg):
-    topic = "PV 702"
-    print(msg.topic+" "+str(msg.payload))
+def on_publish(mqttc, obj, mid):
+    print("mid: " + str(mid))
 
-client = mqtt.Client()
-client.on_connect = on_connect
-client.on_message = on_message
-client.connect("apecpv.cmru.ac.th", 1883, 60)
-client.loop_forever()
+
+def on_subscribe(mqttc, obj, mid, granted_qos):
+    print("Subscribed: " + str(mid) + " " + str(granted_qos))
+
+
+def on_log(mqttc, obj, level, string):
+    print(string)
+
+
+# If you want to use a specific client id, use
+# mqttc = mqtt.Client("client-id")
+# but note that the client id must be unique on the broker. Leaving the client
+# id parameter empty will generate a random id for you.
+mqttc = mqtt.Client()
+mqttc.on_message = on_message
+mqttc.on_connect = on_connect
+mqttc.on_publish = on_publish
+mqttc.on_subscribe = on_subscribe
+mqttc.username_pw_set(username="admin", password="admin")
+mqttc.connect("apecpv.cmru.ac.th", 1883, 60)
+mqttc.subscribe("pv702", 0)
+mqttc.loop_forever()
+
