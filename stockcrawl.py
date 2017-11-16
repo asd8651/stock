@@ -86,7 +86,7 @@ for o in range(len(otcsid)):
             db.commit()
     time.sleep(1)
 '''
-db =pymysql.connect(host='60.249.6.104', port=33060, user='root', passwd='ncutim', db='onmarket' , charset='utf8')
+db =pymysql.connect(host='60.249.6.104', port=33060, user='root', passwd='ncutim', db='stock' , charset='utf8')
 cursor = db.cursor()
 if (db):
     print 'good';
@@ -120,12 +120,7 @@ for l in range(len(newsid)):
                         ENGINE = InnoDB,
                         CHARSET=utf8,
                         COLLATE utf8_unicode_ci;"""
-        st = """select count(*) from `"""+sid+"""`"""
-        searchTable = cursor.execute(st)
-        if (searchTable):
-            print u'資料表已存在';
-        else:
-            cursor.execute(sql);
+        cursor.execute(sql)
         for i in range(len(day)):
             insert = ("""INSERT  INTO `""" + sid + """` (`Date`, `sid`, `name`, `shareTrades`, `turnover`, `open`, `high`, `low`, `closing`) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)""")
             # ON DUPLICATE KEY UPDATE (`Date`,`sid`,`name`,`shareTrades`,`turnover`,`over`,`high`,`low`,`closing`)VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)有更新，無新增
