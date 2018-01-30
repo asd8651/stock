@@ -60,13 +60,21 @@ for year in range(102,int(now)-1911):
                     else:
                         nanb[s] = nanb[s]
             print nanb
-            insert = (
-                """INSERT INTO `Monthrevenue`( `sid`, `name`,`year`, `month`, `thisMonth`, `lastMonth`, `sametimeLastyear`,
-                           `compareLastmonth`, `compareLastyear`, `accumulation`, `accumulationLastyear`, `compareAccumulation`,`date`) VALUES(%s,%s,%s,%s, %s, %s, %s, %s, %s, %s, %s, %s,%s);""")
-            da = (nanb[0], nanb[1], year, month, float(nanb[2]), float(nanb[3]), float(nanb[4]),
-                  float(nanb[5]), float(nanb[6]), float(nanb[7]), float(nanb[8]),
-                  float(nanb[9]), time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
-            cursor.execute(insert, da)
-            db.commit()
+            select = (
+                '''SELECT * FROM `Monthrevenue` WHERE `sid` = "''' + nanb[0] + '''" and `year`="''' + str(year) + '''" and `month`="''' + str(month) + '''"''')
+            cursor.execute(select)
+            search = cursor.fetchone()
+            if search is not None:
+                print year
+                print nanb[0] + 'excited'
+            else:
+                insert = (
+                    """INSERT INTO `Monthrevenue`( `sid`, `name`,`year`, `month`, `thisMonth`, `lastMonth`, `sametimeLastyear`,
+                               `compareLastmonth`, `compareLastyear`, `accumulation`, `accumulationLastyear`, `compareAccumulation`,`date`) VALUES(%s,%s,%s,%s, %s, %s, %s, %s, %s, %s, %s, %s,%s);""")
+                da = (nanb[0], nanb[1], year, month, float(nanb[2]), float(nanb[3]), float(nanb[4]),
+                      float(nanb[5]), float(nanb[6]), float(nanb[7]), float(nanb[8]),
+                      float(nanb[9]), time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
+                cursor.execute(insert, da)
+                db.commit()
         print 'inserted'
     db.close()

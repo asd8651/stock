@@ -10,7 +10,7 @@ import lxml,html5lib
 from pandas import Series, DataFrame
 import time
 from headers import header
-#上傳今天大盤每五秒資料到bigrealtime
+
 
 start = time.time()
 starttime = int(time.strftime("%M", time.localtime()))
@@ -21,6 +21,8 @@ except:
     pass
 cursor = db.cursor()
 
+    #新增欄位alter = """ALTER TABLE `"""+asid+"""` ADD `market` VARCHAR(50) NOT NULL AFTER `name`, ADD `coe` VARCHAR(50) NOT NULL AFTER `market`"""
+    # cursor.execute(alter)
 conntime = int(time.strftime("%M", time.localtime()))
 proxiesList = ["http://60.249.6.104:8080", "http://60.249.6.105:8080",
                 "http://60.249.6.104:8080", "http://192.168.1.3:8080"] * 1000
@@ -42,23 +44,17 @@ print bigReattimeData[u'ohlcArray']
 if (u'ohlcArray' in bigReattimeData.keys()):
     _data = bigReattimeData[u'ohlcArray']
     for i in range(len(_data)):
-        select = (
-            '''SELECT * FROM `bigrealtime` WHERE `totalsecond` = "''' + str(_data[i]['t']) + '''" and `time`="''' + str(_data[i]['ts']) + '''"''')
-        cursor.execute(select)
-        search = cursor.fetchone()
-        if search is not None:
-            print _data[i]['t']+'excited'
-        else:
-            insert = (
-                """INSERT  INTO `bigrealtime` (`totalsecond`,`s`,`time`,`price`,`date`) VALUES (%s,%s,%s,%s,%s)""")
-            da = (
-            _data[i]['t'], _data[i]['s'], _data[i]['ts'], _data[i]['c'], datetime.datetime.now().strftime("%Y%m%d"))
-            cursor.execute(insert, da)
-            try:
-                db.commit()
-            except:
-                pass
-        print 'inserted'
+        insert = (
+            """INSERT  INTO `bigrealtime` (`totalsecond`,`s`,`time`,`price`,`date`) VALUES (%s,%s,%s,%s,%s)""")
+        da = (_data[i]['t'],_data[i]['s'],_data[i]['ts'],_data[i]['c'],datetime.datetime.now().strftime("%Y%m%d"))
+        cursor.execute(insert, da)
+        try:
+            db.commit()
+        except:
+            pass
+print 'inserted'
 db.close()
 end = time.time()
 print end - start
+# 引入thread 同時上傳上市上貴資料
+#ALTER TABLE `1101` ADD `market` VARCHAR(50) NOT NULL AFTER `name`, ADD `coe` VARCHAR(50) NOT NULL AFTER `market`;新增

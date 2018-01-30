@@ -7,7 +7,7 @@ from headers import header
 from ipproxies import proxiesList
 import time
 import datetime
-#抓google新聞到news資料表
+
 db = pymysql.connect(host='60.249.6.104', port=33060, user='root', passwd='ncutim', db='Listing',
                                  charset='utf8')  # 連接資料庫
 cursor = db.cursor()
@@ -21,7 +21,7 @@ for roow in sid:
     ssid.append(f)
     q = q + 1
 print ssid[0]
-cursor.execute("""SELECT `name` FROM 　`stockID`""")
+cursor.execute("""SELECT `name` FROM `stockID`""")
 name=cursor.fetchall()
 sname = []
 for row in name:
@@ -40,11 +40,8 @@ for w in range(len(sname)):
     else:  # 找可用IP塞到list
         headers = {'user-agent': "my-app/0.0.1"}
         proxies = {'proxy': "http://60.249.6.105:8080"}
-    try:
-        res = requests.get("https://news.google.com/news/search/section/q/"+sname[w]+"/"+sname[w]+"?hl=zh-TW",
-                                    headers=headers, proxies=proxies)
-    except:
-        pass
+    res = requests.get("https://news.google.com/news/search/section/q/"+sname[w]+"/"+sname[w]+"?hl=zh-TW",
+                                headers=headers, proxies=proxies)
     soup = BeautifulSoup(res.text, "html.parser")
     news_title=[]
     news_url=[]
@@ -69,24 +66,11 @@ for w in range(len(sname)):
         for b in range(len(news_time)):
             print news_title[b]
             now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-            try:
-                select = (
-                    '''SELECT * FROM `news` WHERE `title`="''' + news_title[b] + '''" and `date` = "''' + news_time[
-                        b] + '''"''')
-                cursor.execute(select)
-                search = cursor.fetchone()
-                if search is not None:
-                    print ssid[w] + 'excited'
-                else:
-                    insert = (
-                        """INSERT  INTO `news` (`sid`,`name`,`title`,`url`,`source`,`date`,`addtime`) VALUES (%s,%s, %s, %s, %s, %s, %s)""")
-                    da = (ssid[w], sname[w], news_title[b], news_url[b], news_source[b], news_time[b], now)
-                    try:
-                        cursor.execute(insert, da)
-                        db.commit()
-                    except:
-                        pass
-                print ssid[w] + 'insert'
-            except:
-                pass
+            insert = (
+                """INSERT  INTO `news` (`sid`,`name`,`title`,`url`,`source`,`date`,`addtime`) VALUES (%s,%s, %s, %s, %s, %s, %s)""")
+            da = (ssid[w], sname[w], news_title[b], news_url[b], news_source[b], news_time[b], now)
+            cursor.execute(insert, da)
+            db.commit()
+        print ssid[w] + 'insert'
+
 db.close()

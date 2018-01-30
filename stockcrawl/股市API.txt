@@ -1,4 +1,3 @@
-python -m pip install -U nltk 
 集中市場大盤成交資訊(done)                        (?後面加response=html為表格呈現)
 -http://www.twse.com.tw/exchangeReport/FMTQIK?&date=20171121
 
@@ -14,7 +13,7 @@ OTC大盤即時
 各類指數日成交量值
 -http://www.twse.com.tw/exchangeReport/BFIAMU?&date=20171121
 
-個股日成交資訊(done)
+個股日成交資訊
 -http://www.twse.com.tw/exchangeReport/STOCK_DAY?&date=20171121&stockNo=2330
 
 當日融券賣出與借券賣出成交量值
@@ -26,7 +25,7 @@ OTC大盤即時
 個股月成交資訊
 -http://www.twse.com.tw/exchangeReport/FMSRFK?&date=20171121&stockNo=2330
 
-個股年成交資訊(done)
+個股年成交資訊
 -http://www.twse.com.tw/exchangeReport/FMNPTK?&stockNo=2330
 
 個股日本益比、殖利率及股價淨值比（依日期查詢）
@@ -35,8 +34,7 @@ OTC大盤即時
 個股日本益比、殖利率及股價淨值比（依代碼查詢）
 -http://www.twse.com.tw/exchangeReport/BWIBBU?&date=20171121&stockNo=2330
 
-搜尋股票
--http://mis.twse.com.tw/stock/api/getStockNames.jsp?n={代碼}
+
 
 
 

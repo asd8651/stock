@@ -44,7 +44,7 @@ else:
         insert = (
              """INSERT  INTO `bigmarket` (`date`, `tradedshares`, `turnover`,`strokecount`,`price`,`changerange`,`time`) VALUES (%s,%s,%s,%s,%s, %s, %s)""")
         da = (
-            _data[-1][0], _data[-1][1], _data[-1][2], _data[-1][3], _data[-1][4], _data[-1][5],
+            _data[-1][0], float(_data[-1][1].encode('utf-8').replace(',', '')), float(_data[-1][2].encode('utf-8').replace(',', '')), float(_data[-1][3].encode('utf-8').replace(',', '')), float(_data[-1][4].encode('utf-8').replace(',', '')), float(_data[-1][5].encode('utf-8').replace(',', '')),
             time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
         cursor.execute(insert, da)
         todaywdb.commit()

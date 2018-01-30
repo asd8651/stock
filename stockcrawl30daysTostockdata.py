@@ -71,15 +71,22 @@ for l in range(len(sid)):
                 high = high
                 low = low
                 closing = closing
-            insert = (
-                """INSERT  INTO `stockdata` (`date`, `sid`, `name`,`market`,`coe`, `shareTrades`, `turnover`, `open`, `high`, `low`, `closing`,`grossspread`,`tradingvolume`,`time`) VALUES (%s,%s,%s,%s, %s, %s, %s, %s, %s, %s, %s, %s,%s,%s)""")
-            da = (
-                _data[i][0], asid, aname, amarket,acoe, float(st), float(to), float(open), float(high),
-                float(low),
-                float(closing),
-                _data[i][7], float(tv), time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
-            cursor.execute(insert, da)
-            db.commit()
+            select = (
+                '''SELECT * FROM `stockdata` WHERE `date` = "''' + _data[i][0] + '''" and `sid`="''' + asid + '''"''')
+            cursor.execute(select)
+            search = cursor.fetchone()
+            if search is not None:
+                pass
+            else:
+                insert = (
+                    """INSERT  INTO `stockdata` (`date`, `sid`, `name`,`market`,`coe`, `shareTrades`, `turnover`, `open`, `high`, `low`, `closing`,`grossspread`,`tradingvolume`,`time`) VALUES (%s,%s,%s,%s, %s, %s, %s, %s, %s, %s, %s, %s,%s,%s)""")
+                da = (
+                    _data[i][0], asid, aname, amarket, acoe, float(st), float(to), float(open), float(high),
+                    float(low),
+                    float(closing),
+                    _data[i][7], float(tv), time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
+                cursor.execute(insert, da)
+                db.commit()
     print asid + 'inserted'
     db.close()
 end = time.time()
